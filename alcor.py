@@ -1,6 +1,5 @@
 #!/usr/local/python/bin/python
-# code to generate the exposure time for 
-# the alcor all sky camera
+# Script to observe with the all-sky camera
 # 
 # to do:	
 #	add basic camera control	
@@ -18,7 +17,7 @@ import numpy as np
 
 config="/home/ops/fswebcam/paranal.conf"
 live_image="/home/ops/webcam/allsky-large.jpeg"
-flags='-s "exposure"="aperture priority mode"'
+flags='-i 0 -l 30 --gmt --no-banner' # try using --read to see if that helps
 
 def adjustExptime(av,texp):
 	texp_min=1
@@ -60,11 +59,12 @@ def getImgAverage(image_id):
 	return av
 
 def main():
+	texp=100
 	while(1):
-		os.system('fswebcam -c %s %s' % (config,flags))
+		os.system('fswebcam -c %s -s "exposure (absolute)"="%d" %s' % (config,texp,flags))
 		time.sleep(5)
 		av=getImgAverage(live_image)
-		#texp=adjustExptime(live_image,texp)
+		texp=adjustExptime(av,texp)
 		
 
 if __name__ == '__main__':
