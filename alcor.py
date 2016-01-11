@@ -15,9 +15,8 @@ import Image
 import sys, os, time
 import numpy as np
 
-config="/home/ops/Alcor/paranal.conf"
-live_image="/home/ops/webcam/allsky-large.jpeg"
-flags='-i 0 --gmt --no-banner' # try using --read to see if that helps
+config="/home/ops/Alcor/paranal_day.conf"
+live_image="/home/ops/webcam/allsky.jpeg"
 
 def adjustExptime(av,texp):
 	
@@ -67,16 +66,17 @@ def getImgAverage(image_id):
 	return av
 
 def main():
-	texp=100
-	adjust=True
+	#texp=100
+	#adjust=True
 	while(1):
-		if adjust:
-			os.system('fswebcam -c %s -s "exposure (absolute)"="%d" %s' % (config,texp,flags))
-		else:
-			os.system('fswebcam -c %s %s' % (config,flags))
+		#if adjust:
+		#	os.system('fswebcam -c %s -s "exposure (absolute)"="%d" %s' % (config,texp,flags))
+		#else:
+		#	os.system('fswebcam -c %s %s' % (config,flags))
+		os.system('fswebcam -c %s' % (config))
 		time.sleep(5)
 		av=getImgAverage(live_image)
-		adjust,texp=adjustExptime(av,texp)
+		#adjust,texp=adjustExptime(av,texp)
 		
 
 if __name__ == '__main__':
