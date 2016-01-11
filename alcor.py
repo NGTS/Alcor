@@ -15,7 +15,7 @@ import Image
 import sys, os, time
 import numpy as np
 
-config="/home/ops/fswebcam/paranal.conf"
+config="/home/ops/Alcor/paranal.conf"
 live_image="/home/ops/webcam/allsky-large.jpeg"
 flags='-i 0 --gmt --no-banner' # try using --read to see if that helps
 
