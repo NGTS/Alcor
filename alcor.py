@@ -5,6 +5,9 @@
 #	add basic camera control	
 #	add Pyro support
 #	add archiving
+#	work out when to jump from day to night mode using el_sun
+#	run the camera in one thread 
+#	run image analysis in another
 # 	
 # The main settings are set in the config file
 # given below. Check here for device and image
@@ -74,8 +77,8 @@ def main():
 		#else:
 		#	os.system('fswebcam -c %s %s' % (config,flags))
 		os.system('fswebcam -c %s' % (config))
-		time.sleep(5)
-		av=getImgAverage(live_image)
+		#time.sleep(5)
+		#av=getImgAverage(live_image)
 		#adjust,texp=adjustExptime(av,texp)
 		
 
