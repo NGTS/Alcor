@@ -23,6 +23,8 @@ from astropy.coordinates import get_sun
 from datetime import datetime as dt
 import astropy.units as u
 import argparse as ap
+import warnings
+warnings.filterwarnings('ignore')
 
 # edit here
 live_image="/home/ops/webcam/allsky.jpeg"
