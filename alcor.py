@@ -47,10 +47,10 @@ args=argParse()
 # work out if it is day or night time
 # based on the current Sun altitude
 def dayOrNight():
-	time=Time(dt.utcnow(),scale='utc')
-	altazframe = AltAz(obstime=time, location=paranal)
-	sunaltaz = get_sun(time).transform_to(altazframe)
-	sunalt=sunaltaz.alt.deg[0]
+	tnow=Time(dt.utcnow(),scale='utc')
+	altazframe = AltAz(obstime=tnow, location=paranal)
+	sunaltaz = get_sun(tnow).transform_to(altazframe)
+	sunalt=sunaltaz.alt.deg
 	if sunalt <= sun_alt_limit:
 		result='night'
 	else:
