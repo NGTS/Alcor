@@ -11,8 +11,9 @@
 #
 # To do:	
 #	add Pyro support
-#	add archiving
-#	run image analysis in another subprocess?
+#	add long term archiving
+#	run some image analysis in another subprocess?
+#	add logging
 #
 
 import os, time
@@ -64,7 +65,7 @@ def dayOrNight():
 	else:
 		result='day'
 	if args.v:
-		print "Sun altitude: %.2f - %s" % (sunalt,result)
+		print "%s - Sun altitude: %.2f - %s" % (dt.utcnow(),sunalt,result)
 	return result
 
 # set up Ctrl+C handling
@@ -98,8 +99,8 @@ def main():
 			if not args.debug:
 				pro=subprocess.Popen(comm,subprocess.PIPE,shell=True,preexec_fn=os.setsid)
 			don=don_new
-		# wait for a bit between checks for change in day/night
-		time.sleep(10)
+		# wait for 5 mins between checks for change in day/night
+		time.sleep(300)
 		# if ctrl+c, die correctly
 		if die == True:
 			print "Killing fswebcam"
