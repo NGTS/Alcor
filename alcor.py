@@ -17,7 +17,7 @@ import numpy as np
 
 config="/home/ops/Alcor/paranal.conf"
 live_image="/home/ops/webcam/allsky-large.jpeg"
-flags='-i 0 --gmt --no-banner' # try using --read to see if that helps
+flags='-i 0 --gmt --no-banner --read' # try using --read to see if that helps
 
 def adjustExptime(av,texp):
 	
