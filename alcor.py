@@ -13,64 +13,66 @@
 # given below. Check here for device and image
 # settings
 #
+import os, time
+import signal, subprocess
+from astropy.time import Time
+from astropy.coordinates import EarthLocation, AltAz
+from astropy.coordinates import get_sun
+from datetime import datetime as dt
 
-import Image
-import sys, os, time
-import numpy as np
-
-config="/home/ops/Alcor/paranal_day.conf"
 live_image="/home/ops/webcam/allsky.jpeg"
+sun_alt_limit = -5
+die=False
 
-def adjustExptime(av,texp):
-	
-	# don't bother if already good	
-	if av < 200 and av > 150:
-		adjust=False
-		print "Current texp is fine, not adjusting"
-		return adjust,texp
+# observatory set up
+olat=-24.-(37./60.)-(38./3600.)
+olon=-70.-(24./60.)-(15./3600.)
+elev=2418.
+paranal=EarthLocation(lat=olat*u.deg,lon=olon*u.deg,height=elev*u.m)
 
-	texp_min=1
-	texp_max=120000
-	target_adu=175
-	diff=target_adu/av
-	
-	# some sanity checks on low/high counts
-	if av < 10:
-		diff=1.5
-	elif av >240:
-		diff=0.5
+# work out if it is day or night time
+# based on the current Sun altitude
+def dayOrNight():
+	time=Time(dt.utcnow(),scale='utc')
+	altazframe = AltAz(obstime=time, location=paranal)
+	sunaltaz = get_sun(time).transform_to(altazframe)
+	sunalt=sunaltaz.alt.deg[0]
+	if sunalt <= sun_alt_limit:
+		return 'night'
+	else:
+		return 'day'
 
-	# more sanity checks on runaway scaling
-	# max of +/- 50% 
-	if diff > 1.5:
-		diff=1.5
-	elif diff < 0.5:
-		diff=0.5
+# set up Ctrl+C handling
+def signal_handler(signal,frame):
+	global die
+	print "Ctrl+C caught, exiting..."
+	die=True
+signal.signal(signal.SIGINT,signal_handler)
 
-	new_texp=int(texp*(diff))
-	if new_texp>texp_max:
-		new_texp=texp_max
-	elif new_texp<texp_min:
-		new_texp=texp_min
-	print "New exptime: %d" % (new_texp)
-	adjust=True
-	return adjust,new_texp
-
-def getImgAverage(image_id):
-	img=Image.open(image_id)
-	x,y=img.size
-	# get a 400 pixel box in the middle for exposure control
-	# left, upper, right, lower - from top left
-	box=((x/2)-200,(y/2)-200,(x/2)+200,(y/2)+200)
-	region=img.crop(box)
-	data=np.asarray(region)
-	av=np.average(data)
-	print "Image average: %.2f" % (av)
-	return av
-
-def main():	
-	os.system('fswebcam -c %s' % (config))
-
+# main function
+def main():
+	global die
+	don=dayOrNight()
+	comm='fswebcam -c paranal_%s.conf' % (don)
+	print "%s - %s" % (dt.utcnow(),comm)
+	pro=subprocess.Popen(comm,subprocess.PIPE,shell=True,preexec_fn=os.setsid)
+	while(1):
+		don_new=dayOrNight()
+		if don_new != don:
+			# change settings
+			print "%s - Changing the settings to %s" % (dt.utcnow(),don)
+			os.killpg(os.getpgid(pro.pid), signal.SIGTERM)
+			time.sleep(30)
+			comm='fswebcam -c paranal_%s.conf' % (don_new)
+			print "%s - %s" % (dt.utcnow(),comm)
+			pro=subprocess.Popen(comm,subprocess.PIPE,shell=True,preexec_fn=os.setsid)
+			don=don_new
+		time.sleep(10)
+		if die == True:
+			print "Killing fswebcam"
+			os.killpg(os.getpgid(pro.pid), signal.SIGTERM)
+			print "Exiting..."
+			break
 
 if __name__ == '__main__':
 	main()
