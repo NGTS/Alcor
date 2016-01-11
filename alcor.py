@@ -68,19 +68,9 @@ def getImgAverage(image_id):
 	print "Image average: %.2f" % (av)
 	return av
 
-def main():
-	#texp=100
-	#adjust=True
-	while(1):
-		#if adjust:
-		#	os.system('fswebcam -c %s -s "exposure (absolute)"="%d" %s' % (config,texp,flags))
-		#else:
-		#	os.system('fswebcam -c %s %s' % (config,flags))
-		os.system('fswebcam -c %s' % (config))
-		#time.sleep(5)
-		#av=getImgAverage(live_image)
-		#adjust,texp=adjustExptime(av,texp)
-		
+def main():	
+	os.system('fswebcam -c %s' % (config))
+
 
 if __name__ == '__main__':
 	main()
