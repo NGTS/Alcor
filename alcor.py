@@ -40,11 +40,11 @@ die=False
 # parse command line
 def argParse():
 	description="""
-			Alcor all-sky camera control script.\n 
-			--------------------------------------\n
-			Camera control is done using fswebcam. Edit camera\'s day/night 
-			settings using the fswebcam .conf files in the Git repo. 
-			"""
+		Alcor all-sky camera control script.\n 
+		--------------------------------------\n
+		Camera control is done using fswebcam. Edit camera\'s day/night 
+		settings using the fswebcam .conf files in the Git repo. 
+		"""
 	parser=ap.ArgumentParser(description=description)
 	parser.add_argument("--debug",help="run in deugging mode",action="store_true")
 	parser.add_argument("--v",help="increased verbosity",action="store_true")
