@@ -28,7 +28,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # edit here
-live_image="/home/ops/webcam/allsky.jpeg"
+live_image="/home/ops/allskycam/allsky.jpeg"
 sun_alt_limit = -5
 
 # observatory set up
