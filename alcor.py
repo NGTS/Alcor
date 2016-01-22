@@ -41,8 +41,7 @@ die=False
 # parse command line
 def argParse():
 	description="""
-		Alcor all-sky camera control script.\n 
-		--------------------------------------\n
+		Alcor all-sky camera control script.
 		Camera control is done using fswebcam. Edit camera\'s day/night 
 		settings using the fswebcam .conf files in the Git repo. 
 		"""
