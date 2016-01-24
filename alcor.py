@@ -28,8 +28,12 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # edit here
-live_image="/home/ops/allskycam/allsky.jpeg"
+image_dir="/home/ops/allskycam"
 sun_alt_limit = -5
+if os.path.exists(image_dir) == False:
+	os.mkdir(image_dir)
+
+live_image="%s/allsky.jpeg" % (image_dir)
 
 # observatory set up
 olat=-24.-(37./60.)-(38./3600.)
