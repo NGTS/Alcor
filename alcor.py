@@ -27,21 +27,6 @@ import argparse as ap
 import warnings
 warnings.filterwarnings('ignore')
 
-# edit here
-image_dir="/home/ops/allskycam"
-sun_alt_limit = -5
-if os.path.exists(image_dir) == False:
-	os.mkdir(image_dir)
-
-live_image="%s/allsky.jpeg" % (image_dir)
-
-# observatory set up
-olat=-24.-(37./60.)-(38./3600.)
-olon=-70.-(24./60.)-(15./3600.)
-elev=2418.
-paranal=EarthLocation(lat=olat*u.deg,lon=olon*u.deg,height=elev*u.m)
-die=False
-
 # parse command line
 def argParse():
 	description="""
@@ -55,6 +40,20 @@ def argParse():
 	return parser.parse_args()
 
 args=argParse()
+
+# edit here
+image_dir="/home/ops/allskycam"
+sun_alt_limit = -5
+if os.path.exists(image_dir) == False:
+	os.mkdir(image_dir)
+live_image="%s/allsky.jpeg" % (image_dir)
+
+# observatory set up
+olat=-24.-(37./60.)-(38./3600.)
+olon=-70.-(24./60.)-(15./3600.)
+elev=2418.
+paranal=EarthLocation(lat=olat*u.deg,lon=olon*u.deg,height=elev*u.m)
+die=False
 
 # work out if it is day or night time
 # based on the current Sun altitude
