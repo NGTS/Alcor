@@ -27,6 +27,14 @@ import argparse as ap
 import warnings
 warnings.filterwarnings('ignore')
 
+# edit here
+image_dir="/home/ops/allskycam"
+# observatory set up
+olat=-24.-(37./60.)-(38./3600.)
+olon=-70.-(24./60.)-(15./3600.)
+elev=2418.
+obsloc=EarthLocation(lat=olat*u.deg,lon=olon*u.deg,height=elev*u.m)
+
 # parse command line
 def argParse():
 	description="""
@@ -35,31 +43,27 @@ def argParse():
 		settings using the fswebcam .conf files in the Git repo. 
 		"""
 	parser=ap.ArgumentParser(description=description)
-	parser.add_argument("--debug",help="run in deugging mode",action="store_true")
-	parser.add_argument("--v",help="increased verbosity",action="store_true")
+	parser.add_argument("--sunalt",type=int,help="Sun altitude limit for day/night transition")
+	parser.add_argument("--debug",help="Run in deugging mode",action="store_true")
+	parser.add_argument("--v",help="Increased verbosity",action="store_true")
 	return parser.parse_args()
 
+# pre imaging checks
 args=argParse()
-
-# edit here
-image_dir="/home/ops/allskycam"
-sun_alt_limit = -5
+if args.sunalt:
+	sun_alt_limit = args.sunalt
+else:
+	sun_alt_limit = -5
 if os.path.exists(image_dir) == False:
 	os.mkdir(image_dir)
 live_image="%s/allsky.jpeg" % (image_dir)
-
-# observatory set up
-olat=-24.-(37./60.)-(38./3600.)
-olon=-70.-(24./60.)-(15./3600.)
-elev=2418.
-paranal=EarthLocation(lat=olat*u.deg,lon=olon*u.deg,height=elev*u.m)
 die=False
 
 # work out if it is day or night time
 # based on the current Sun altitude
 def dayOrNight():
 	tnow=Time(dt.utcnow(),scale='utc')
-	altazframe = AltAz(obstime=tnow, location=paranal)
+	altazframe = AltAz(obstime=tnow, location=obsloc)
 	sunaltaz = get_sun(tnow).transform_to(altazframe)
 	sunalt=sunaltaz.alt.deg
 	if sunalt <= sun_alt_limit:
