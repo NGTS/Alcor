@@ -17,8 +17,9 @@ repo.
 
 optional arguments:
   -h, --help  show this help message and exit
-  --debug     run in deugging mode
-  --v         increased verbosity
+  --sunalt SUNALT Sun altitude limit for day/night transition
+  --debug         Run in deugging mode
+  --v             Increased verbosity
 ```
 To start the script simply run:
 
@@ -39,7 +40,19 @@ _libgd2-noxpm-dev_ <br/>
 _ttf-dejavu_ (optional, different fonts can be used, see .conf files)<br/>
 _astropy_ <br>
 
-Install the dependencies above, clone this repo and voila.
+Install the dependencies above, clone this repo and edit the observatory setup section at the beginning of the alcor.py script, 
+
+```python
+# edit here
+image_dir="/home/ops/allskycam"
+# observatory set up
+olat=-24.-(37./60.)-(38./3600.)
+olon=-70.-(24./60.)-(15./3600.)
+elev=2418.
+obsloc=EarthLocation(lat=olat*u.deg,lon=olon*u.deg,height=elev*u.m)
+```
+
+adjust the configuration parameters in the .conf files and voila, you are ready to take some images
 
 ## API Reference
 
