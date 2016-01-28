@@ -40,7 +40,7 @@ _libgd2-noxpm-dev_ <br/>
 _ttf-dejavu_ (optional, different fonts can be used, see .conf files)<br/>
 _astropy_ <br>
 
-Install the dependencies above, clone this repo and edit the observatory setup section at the beginning of the alcor.py script, 
+Install the dependencies above, clone this repo and edit the observatory setup section at the beginning of the alcor.py script: 
 
 ```python
 # edit here
@@ -52,7 +52,52 @@ elev=2418.
 obsloc=EarthLocation(lat=olat*u.deg,lon=olon*u.deg,height=elev*u.m)
 ```
 
-adjust the configuration parameters in the .conf files and voila, you are ready to take some images
+Adjust the configuration parameters in the day and night .conf files, e.g.: Additional .conf files maybe included (e.g. for twilight). This would require a slight modification of alcor.py to add an additional check on the Sun altitude. I will investigate this further when our OMEA camera goes on sky in February.
+
+```
+# Paranal_day.conf - James McCormac 20160110
+
+# Be very quiet...
+quiet
+
+# Or be very loud?
+#verbose
+
+# The image source - 
+device     "/dev/video0"
+input      0
+palette    GREY
+resolution 1600x1200
+loop       30
+skip       5
+set        "exposure (absolute)"="1000" 
+timeout    5
+frames     100
+
+# design the banner
+top-banner
+font          "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf"
+title         "NGTS All Sky Camera"
+subtitle      "PAO subtitle"
+info          "PAO info"
+banner-colour #FF000000
+line-colour   #FF000000
+text-colour   #FF000000
+gmt
+
+# Save it to a shared folder.
+save "/home/ops/allskycam/allsky.jpeg"
+
+# Save another copy for the archive. The archive contains a folder for each
+# day of images. First we create the folder if it doesn't already exist.
+exec "mkdir /home/ops/allskycam/%Y%m%d 2> /dev/null"
+
+# Then save the image into it.
+save "/home/ops/allskycam/%Y%m%d/allsky-%Y%m%d-%H%M%S.jpeg"
+```
+Additional .conf files maybe included (e.g. for twilight). This would require a slight modification of alcor.py to add an additional check on the Sun altitude. I will investigate this further when our OMEA camera goes on sky in February.
+
+A full description of all the fswebcam parameters is given in the fswebcam help file. Voila, you are ready to take some images
 
 ## API Reference
 
