@@ -52,8 +52,7 @@ elev=2418.
 obsloc=EarthLocation(lat=olat*u.deg,lon=olon*u.deg,height=elev*u.m)
 ```
 
-Adjust the configuration parameters in the day and night .conf files, e.g.: Additional .conf files maybe included (e.g. for twilight). This would require a slight modification of alcor.py to add an additional check on the Sun altitude. I will investigate this further when our OMEA camera goes on sky in February.
-
+Adjust the configuration parameters in the day and night .conf files, e.g: 
 ```
 # Paranal_day.conf - James McCormac 20160110
 
