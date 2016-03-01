@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # script to push the alcor images to staging 
 # and the monitor page image directory every 5 mins
 import os
