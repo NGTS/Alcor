@@ -4,7 +4,7 @@
 import os, Pyro4
 import glob as g
 
-skywatch_dir='/cygdrive/c/Users/ops/Documents/skywatch'
+skywatch_dir='/cygdrive/c/Users/ops/Documents/skywatch/'
 
 def getLastImage():
 	return open('%s/lastimg.txt' % (skywatch_dir)).readline().split('\n')[0]
