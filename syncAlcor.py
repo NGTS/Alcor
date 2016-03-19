@@ -24,7 +24,7 @@ if t[-1] != lastimg:
 	print("Checking in with centralHub")
 	hub = Pyro4.Proxy('PYRONAME:central.hub')
 	hub.report_in('alcor')
-	print("Archiving images from /cygcrive/c/Users/ops/Documents/skywatch/")
+	print("Archiving images from /cygcrive/c/Users/ops/Documents/skywatch")
 	os.system('rsync -Havp /cygcrive/c/Users/ops/Documents/skywatch/ ops@10.2.5.32:/ngts/staging/archive/allskycam/')
 	print("Passing image %s to monitor page" % (t[-1]))
 	os.system('scp %s ops@10.2.5.32:/home/ops/ngts/prism/monitor/img/allsky.jpg' % (t[-1]))
