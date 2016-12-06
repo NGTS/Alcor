@@ -5,14 +5,16 @@
 import os, Pyro4
 import glob as g
 
-skywatch_dir='/cygdrive/c/Users/ops/Documents/skywatch'
+top_dir='/cygdrive/c/Users/ops/Documents'
+skywatch_dir='{}/skywatch'.format(top_dir)
+exclude_file = '/home/ops/Alcor/syncAlcorExcludeFiles.txt'
 
 def getLastImage():
-    return open('{}/lastimg.txt'.format(skywatch_dir)).readline().split('\n')[0]
+    return open('{}/lastimg.txt'.format(skywatch_dir)).readline().rstrip()
 
 def setLastImage(image_id):
     f = open('{}/lastimg.txt'.format(skywatch_dir),'w')
-    f.write(image_id)
+    f.write("{}\n".format(image_id))
     f.close()
 
 if __name__ == "__main__":
@@ -26,8 +28,9 @@ if __name__ == "__main__":
         print("Checking in with centralHub")
         hub = Pyro4.Proxy('PYRONAME:central.hub')
         hub.report_in('alcor')
-        print("Archiving image {}".format(t[-1]))
-        os.system('scp {} ops@10.2.5.32:/ngts/staging/archive/allskycam/'.format(t[-1]))
+        print("Rsycning data folder")
+        os.system("rsync -avzHPn --stats --exclude-from {} {}/skywatch ops@10.2.5.32:/ngts/staging/archive/allskycam".format(exclude_file, top_dir))
+        #os.system('scp {} ops@10.2.5.32:/ngts/staging/archive/allskycam/'.format(t[-1]))
         print("Passing image {} to monitor page".format(t[-1]))
         os.system('scp {} ops@10.2.5.32:/home/ops/ngts/prism/monitor/img/allsky.jpg'.format(t[-1]))
         print('Updating last image to {}'.format(lastimg))
