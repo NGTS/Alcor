@@ -28,7 +28,7 @@ if __name__ == "__main__":
         hub = Pyro4.Proxy('PYRONAME:central.hub')
         hub.report_in('alcor')
         print("Rsycning data folder")
-        os.system("rsync -avzHP --stats {}/skywatch ops@10.2.5.32:/ngts/staging/archive/allskycam".format(top_dir))
+        os.system("rsync -avzHP --stats --exclude 'Logs' {}/skywatch ops@10.2.5.32:/ngts/staging/archive/allskycam".format(top_dir))
         #os.system('scp {} ops@10.2.5.32:/ngts/staging/archive/allskycam/'.format(t[-1]))
         print("Passing image {} to monitor page".format(t[-1]))
         os.system('scp {} ops@10.2.5.32:/home/ops/ngts/prism/monitor/img/allsky.jpg'.format(t[-1]))
