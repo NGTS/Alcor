@@ -32,7 +32,8 @@ if __name__ == "__main__":
         #os.system('scp {} ops@10.2.5.32:/ngts/staging/archive/allskycam/'.format(t[-1]))
         print("Passing image {} to monitor page".format(t[-1]))
         os.system('scp {} ops@10.2.5.32:/home/ops/ngts/prism/monitor/img/allsky.jpg'.format(t[-1]))
-        print('Updating last image to {}'.format(lastimg))
+        print('Updating last image to {}'.format(t[-1]))
+        setLastImage(t[-1])
         print("Done!")
     else:
         print('{} has not updated, skipping...'.format(t[-1]))
