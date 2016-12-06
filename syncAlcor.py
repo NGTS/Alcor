@@ -1,35 +1,39 @@
 #!/usr/bin/python
-# script to push the alcor images to staging 
-# and the monitor page image directory every 5 mins
+# script to push the alcor images to staging
+# and the monitor page image directory every X minutes
+# on a cronjob
 import os, Pyro4
 import glob as g
 
 skywatch_dir='/cygdrive/c/Users/ops/Documents/skywatch'
 
 def getLastImage():
-	return open('%s/lastimg.txt' % (skywatch_dir)).readline().split('\n')[0]
+    return open('{}/lastimg.txt'.format(skywatch_dir)).readline().split('\n')[0]
 
 def setLastImage(image_id):
-	f=open('%s/lastimg.txt' % (skywatch_dir),'w')
-	f.write(image_id)
-	f.close()
+    f = open('{}/lastimg.txt'.format(skywatch_dir),'w')
+    f.write(image_id)
+    f.close()
 
-os.chdir(skywatch_dir)
-lastimg=getLastImage()
-current_dir=sorted(g.glob('*-*-*'))[-1]
-print('Moving to %s' % current_dir)
-os.chdir(current_dir)
-t=g.glob('*.jpg')
-if t[-1] != lastimg:
-	print("Checking in with centralHub")
-	hub = Pyro4.Proxy('PYRONAME:central.hub')
-	hub.report_in('alcor')
-	print("Archiving image %s" % (t[-1]))
-	os.system('scp %s ops@10.2.5.32:/ngts/staging/archive/allskycam/' % (t[-1]))
-	print("Passing image %s to monitor page" % (t[-1]))
-	os.system('scp %s ops@10.2.5.32:/home/ops/ngts/prism/monitor/img/allsky.jpg' % (t[-1]))
-	print("Done!")
-else:
-	print('%s has not updated, skipping...' % (t[-1])) 
-	print("Skipping check in with centralHub...")
+if __name__ == "__main__":
+    os.chdir(skywatch_dir)
+    lastimg = getLastImage()
+    current_dir = sorted(g.glob('*-*-*'))[-1]
+    print('Moving to %s' % current_dir)
+    os.chdir(current_dir)
+    t = g.glob('*.jpg')
+    if t[-1] != lastimg:
+        print("Checking in with centralHub")
+        hub = Pyro4.Proxy('PYRONAME:central.hub')
+        hub.report_in('alcor')
+        print("Archiving image {}".format(t[-1]))
+        os.system('scp {} ops@10.2.5.32:/ngts/staging/archive/allskycam/'.format(t[-1]))
+        print("Passing image {} to monitor page".format(t[-1]))
+        os.system('scp {} ops@10.2.5.32:/home/ops/ngts/prism/monitor/img/allsky.jpg'.format(t[-1]))
+        print('Updating last image to {}'.format(lastimg))
+        print("Done!")
+
+    else:
+        print('{} has not updated, skipping...'.format(t[-1]))
+        print("Skipping check in with centralHub...")
 
