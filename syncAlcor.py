@@ -5,9 +5,8 @@
 import os, Pyro4
 import glob as g
 
-top_dir='/cygdrive/c/Users/ops/Documents'
-skywatch_dir='{}/skywatch'.format(top_dir)
-exclude_file = '/home/ops/Alcor/syncAlcorExcludeFiles.txt'
+top_dir = '/cygdrive/c/Users/ops/Documents'
+skywatch_dir = '{}/skywatch'.format(top_dir)
 
 def getLastImage():
     return open('{}/lastimg.txt'.format(skywatch_dir)).readline().rstrip()
@@ -29,13 +28,12 @@ if __name__ == "__main__":
         hub = Pyro4.Proxy('PYRONAME:central.hub')
         hub.report_in('alcor')
         print("Rsycning data folder")
-        os.system("rsync -avzHPn --stats --exclude-from {} {}/skywatch ops@10.2.5.32:/ngts/staging/archive/allskycam".format(exclude_file, top_dir))
+        os.system("rsync -avzHPn --stats {}/skywatch ops@10.2.5.32:/ngts/staging/archive/allskycam".format(top_dir))
         #os.system('scp {} ops@10.2.5.32:/ngts/staging/archive/allskycam/'.format(t[-1]))
         print("Passing image {} to monitor page".format(t[-1]))
         os.system('scp {} ops@10.2.5.32:/home/ops/ngts/prism/monitor/img/allsky.jpg'.format(t[-1]))
         print('Updating last image to {}'.format(lastimg))
         print("Done!")
-
     else:
         print('{} has not updated, skipping...'.format(t[-1]))
         print("Skipping check in with centralHub...")
