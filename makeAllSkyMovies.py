@@ -3,7 +3,7 @@ Script to make daily movies of the all sky images
 from NGTS using ffmpeg
 """
 import os
-import glob
+import glob as g
 
 if __name__ == "__main__":
     data_dir = '/ngts/staging/archive/allskycam'
