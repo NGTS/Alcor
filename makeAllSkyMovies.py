@@ -12,6 +12,12 @@ if __name__ == "__main__":
     templist = g.glob('2016-01-*')
     for i in templist:
         os.chdir(i)
-        cmd = "ffmpeg -i '%*.jp*' -r 30 -q:v 2 {}/{}.mp4".format(movie_dir, i)
+        # get the file extension
+        l1 = g.glob('*.jpeg')
+        l2 = g.glob('*.jpg')
+        if len(l1) > len(l2):
+            cmd = "ffmpeg -i '%*.jpeg' -r 30 -q:v 2 {}/{}.mp4".format(movie_dir, i)
+        else:
+            cmd = "ffmpeg -i '%*.jpg' -r 30 -q:v 2 {}/{}.mp4".format(movie_dir, i)
         os.system(cmd)
         os.chdir('../')
