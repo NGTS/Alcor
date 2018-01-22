@@ -13,4 +13,5 @@ if __name__ == "__main__":
     for i in templist:
         os.chdir(i)
         cmd = "ffmpeg -i '%*.jpg' -r 30 -q:v 2 {}/{}.mp4".format(movie_dir, i)
+        os.system(cmd)
         os.chdir('../')
