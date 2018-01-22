@@ -9,7 +9,7 @@ if __name__ == "__main__":
     data_dir = '/ngts/staging/archive/allskycam'
     movie_dir = '{}/movies'.format(data_dir)
     os.chdir(data_dir)
-    templist = sorted(g.glob('2016-01-*'))
+    templist = sorted(g.glob('2016-02-*'))
     for i in templist:
         os.chdir(i)
         # get the file extension
