@@ -16,8 +16,8 @@ if __name__ == "__main__":
         l1 = g.glob('*.jpeg')
         l2 = g.glob('*.jpg')
         if len(l1) > len(l2):
-            cmd = "ffmpeg -i '%*.jpeg' -r 30 -q:v 2 {}/{}.mp4".format(movie_dir, i)
+            cmd = "ffmpeg -y -i '%*.jpeg' -r 30 -q:v 2 {}/{}.mp4".format(movie_dir, i)
         else:
-            cmd = "ffmpeg -i '%*.jpg' -r 30 -q:v 2 {}/{}.mp4".format(movie_dir, i)
+            cmd = "ffmpeg -y -i '%*.jpg' -r 30 -q:v 2 {}/{}.mp4".format(movie_dir, i)
         os.system(cmd)
         os.chdir('../')
