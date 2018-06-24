@@ -13,7 +13,7 @@ if __name__ == "__main__":
     data_dir = '/ngts/staging/archive/allskycam'
     movie_dir = '{}/movies'.format(data_dir)
     os.chdir(data_dir)
-    templist = sorted(g.glob('2017*'))
+    templist = sorted(g.glob('2018*'))
     for i in templist:
         print('\nMaking all-sky movie for {}\n'.format(i))
         output_file = "{}/{}.mp4".format(movie_dir, i)
