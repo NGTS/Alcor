@@ -3,17 +3,28 @@ Script to make daily movies of the all sky images
 from NGTS using ffmpeg
 """
 import os
+import argparse as ap
 import glob as g
 import multiprocessing as mp
 
 # pylint: disable=invalid-name
 
+def arg_parse():
+    """
+    parse command line arguments
+    """
+    p = ap.ArgumentParser()
+    p.add_argument('datestr',
+                   help='Date string, e.g. 2019-01-*')
+    return p.parse_args()
+
 if __name__ == "__main__":
+    args = arg_parse()
     n_cpu = mp.cpu_count()
     data_dir = '/ngts/staging/archive/allskycam'
     movie_dir = '{}/movies'.format(data_dir)
     os.chdir(data_dir)
-    templist = sorted(g.glob('2018*'))
+    templist = sorted(g.glob(args.datestr))
     for i in templist:
         print('\nMaking all-sky movie for {}\n'.format(i))
         output_file = "{}/{}.mp4".format(movie_dir, i)
